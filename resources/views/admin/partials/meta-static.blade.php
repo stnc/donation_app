@@ -1,0 +1,2 @@
+@section('meta-title') New IT Books - Blogs about Newly Released IT Books @endsection
+@section('meta-desc') New IT Books has the latest reviews and articals on IT books. Get the real insight of your favourite book at New IT Books. @endsection
