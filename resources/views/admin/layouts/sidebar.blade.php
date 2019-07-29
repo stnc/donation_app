@@ -3,8 +3,8 @@
         <nav class="navbar align-items-stretch navbar-light bg-white flex-md-nowrap border-bottom p-0">
             <a class="navbar-brand w-100 mr-0" href="#" style="line-height: 25px;">
                 <div class="d-table m-auto">
-                    <img id="main-logo" class="d-inline-block align-top mr-1" style="max-width: 25px;" src="images/shards-dashboards-logo.svg" alt="Shards Dashboard">
-                    <span class="d-none d-md-inline ml-1">Shards Dashboard</span>
+                    <img id="main-logo" class="d-inline-block align-top mr-1" style="max-width: 80px;" src="/images/Asset-7@2x.webp" alt="Evfa Otamosyon">
+                     <span class="d-none d-md-inline ml-1">Otomasyon sistemi</span>
                 </div>
             </a>
             <a class="toggle-sidebar d-sm-inline d-md-none d-lg-none">
@@ -35,6 +35,32 @@
                 <a class="nav-link " href="/admin/kumbara/create">
                     <i class="material-icons">note_add</i>
                     <span>Kumbara Ekle</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="/admin/rehber/">
+                <i class="material-icons">person</i>
+                    <span>Rehber</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link " href="/admin/rehber/create">
+                    <i class="material-icons">note_add</i>
+                    <span>Rehbere Ekle</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="/admin/smstaslak/">
+                <i class="material-icons">person</i>
+                    <span>sms taslakları</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link " href="/admin/smstaslak/create">
+                    <i class="material-icons">note_add</i>
+                    <span>sms taslak Ekle</span>
                 </a>
             </li>
 

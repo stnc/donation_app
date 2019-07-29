@@ -28,8 +28,8 @@
 
         <div class="page-header row no-gutters py-4">
             <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
-                <span class="text-uppercase page-subtitle">Kumbara listesi</span>
-                <h3 class="page-title"> Kumbara</h3>
+                <span class="text-uppercase page-subtitle">Rehber</span>
+                <h3 class="page-title"> Rehber lsitesi</h3>
             </div>
         </div>
         <!-- End Page Header -->
@@ -40,21 +40,17 @@
                 <div class="col">
                     <div class="card card-small mb-4">
                         <div class="card-header border-bottom">
-                            <h6 class="m-0">Posts</h6>
+                            <h6 class="m-0">Rehber</h6>
                         </div>
                         <div class="card-body p-0 pb-3 text-center">
-                            <table  id="example1"  class="table mb-0">
+                            <table  id="example1"  class="table dataTable mb-0">
                                 <thead class="bg-light">
                                 <tr>
                                     <th>No</th>
 
                                     <th>ad soyad</th>
                                     <th>telefon</th>
-                                    <th>miktar</th>
-
-                          
-                                    <th>ilceAdi</th>
-                                    <th>ilAdi</th>
+                                
 
                                     <th width="280px">Action</th>
                                 </tr>
@@ -82,14 +78,12 @@
                         $('#example1').DataTable({
                             processing: true,
                             serverSide: true,
-                            ajax: '{{ route('posts/getfaproduct').'?tek='.request()->get('tek') }}',
+                            ajax: '{{ route('posts/getrehberlist').'?tek='.request()->get('tek') }}',
                             columns: [
-                                {data: 'kumbara_id', name: 'kumbara.id'},
+                                {data: 'id', name: 'id'},
                                 {data: 'ad_soyad', name: 'ad_soyad'},
                                 {data: 'telefon', name: 'telefon'},
-                                {data: 'miktar', name: 'miktar'},
-                                {data: 'ilAdi', name: 'city.CityName'},
-                                {data: 'ilceAdi', name: 'town.TownName'},
+             
                                 {data: 'action', name: 'action', orderable: false, searchable: false}
                             ],
                             "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>',
@@ -114,7 +108,7 @@
                                 });
                             },
 
-                            columnDefs: [{orderable: false, targets: [-1]}],
+                            columnDefs: [{orderable: true, targets: [-1]}],
 
 
                         });

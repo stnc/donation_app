@@ -34,11 +34,17 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 
     Route::get('home', 'HomeController@index');
     Route::resource('kumbara', 'KumbaraAdminController');
+    Route::resource('rehber', 'RehberAdminController');
+    Route::resource('smstaslak', 'SmsTaslakAdminController');
+    Route::resource('sendSms', 'SendSmsAdminController');
 
 
 
-//ajax il ve ilçe 
-    Route::get('get-state-list','DropdownAdminController@getStateList');
+        //ajax il ve ilçe 
+    Route::get('get-state-list','KumbaraAdminController@getStateList');
+
+    //ajax sms draft list
+    Route::get('get-smstaslak-list','SendSmsAdminController@getSmsTaslakList');
 
 
     Route::group(['prefix' => 'account'], function () {
@@ -55,6 +61,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
 });
 
 Route::get('posts/getfaproduct', 'Admin\KumbaraAdminController@dtajax')->name('posts/getfaproduct');
+Route::get('posts/getrehberlist', 'Admin\RehberAdminController@dtajax')->name('posts/getrehberlist');
+Route::get('posts/getsmstaslaklist', 'Admin\SmsTaslakAdminController@dtajax')->name('posts/getsmstaslaklist');
 
 
 Auth::routes();

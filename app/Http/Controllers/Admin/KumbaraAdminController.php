@@ -53,7 +53,7 @@ class KumbaraAdminController extends AdminController
         $townList = \App\Models\Town::all();
 
 
-        return view('admin.kumbara.create', compact('citys','townList',));
+        return view('admin.kumbara.create', compact('citys','townList'));
 
     }
 
@@ -139,26 +139,26 @@ class KumbaraAdminController extends AdminController
     public function edit($id)
 
     {
-        $posts = Posts::where('id', '=', $id)->with('categories', 'comments')->first();
+        $posts = Kumbara::where('id', '=', $id)->first();
+    
 
-        $cats = \App\Models\Category::all()->pluck('name', 'id');
+        $citys = \App\Models\City::all();
+    
+         $townList = \App\Models\Town::where('CityID', '=',  $posts->city_id)->get();
 
-        $collection = collect($cats);
+        return view('admin.kumbara.edit', compact('citys','townList','posts'));
 
-        $pluck = $posts->categories->pluck('name', 'id');
-
-        $otherCat = $collection->diff($pluck);
-
-        $tagsArray = $posts->tags->toArray();
-
-        $collectionTags = collect($tagsArray);
-
-        $tags = $collectionTags->implode('name', ',');
-
-        return view('admin.kumbara.edit', compact('posts', 'otherCat', 'tags'));
 
     }
 
+    //ajax method
+    public function getStateList(Request $request)
+    {
+        $states = DB::table("town")
+        ->where("CityID",$request->city_id)
+        ->pluck("TownName","TownID");
+        return response()->json($states);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -173,44 +173,46 @@ class KumbaraAdminController extends AdminController
 
     {
 
-//dd($request->get('cat'));
-
-        $this->validate($request, [
-            'post_title' => 'required',
-            'post_content' => 'required',
-            'media_picture' => ' mimes:jpeg,jpg,png | max:1000',
-        ]);
-
-        $destinationPath = 'uploads';
-        $fileName = null;
-        if ($request->hasFile('media_picture')) {
-            $file = $request->media_picture;
-            $timestamp = str_replace([' ', ':'], '-', Carbon::now()->toDateTimeString());
-            $fileName = $timestamp . '-' . $file->getClientOriginalName();
-            $file->move($destinationPath, $fileName);
-        }
 
 
-        $update_data = [
-            'post_title' => $request->post_title,
-            'post_content' => $request->post_content,
-            'media_picture' => $fileName,
-            'post_author' => 1
-        ];
 
-        $posts = Posts::find($id);
+$this->validate($request, [
+    'ad_soyad' => 'required',
+    'telefon' => 'required',
 
-        $posts->update($update_data);
+]);
 
-        $posts->categories()->sync($request->get('cat'));
+$kumbara_data = [
+    'ad_soyad' => $request->ad_soyad,
+    'telefon' => $request->telefon,
+    'referans' => $request->referans,
+    'miktar' => $request->miktar,
+    'meslek' => $request->meslek,
+    'email' => $request->email,
+    'aciklama' => $request->aciklama,
+    'town_id' => $request->town_id,
+    'city_id' => $request->city_id,
+    'add_user_id' => Auth('admin')->user()->id,
+];
+$kukmbara = Kumbara::find($id);
+$kukmbara->update($kumbara_data);
 
-        $explode = explode(',', $request->get('tags'));
 
-        foreach ($explode as $exp) {
-            $tag = new \App\Models\Tag;
-            $tag->name = $exp;
-            $posts->tags()->save($tag);
-        }
+
+$rehber_data = [
+    'ad_soyad' => $request->ad_soyad,
+    'telefon' => $request->telefon,
+    'add_user_id' => Auth('admin')->user()->id,
+    'add_method' => 1,
+    'relation_id' => $kukmbara->id,
+];
+
+
+$Rehber = Rehber::where('relation_id', '=',  $kukmbara->id);
+$Rehber->update($rehber_data);
+
+
+
 
         return redirect()->route('kumbara.edit', ["id" => $id])
             ->with('success', 'Posts updated successfully');
@@ -229,7 +231,7 @@ class KumbaraAdminController extends AdminController
 
     {
 
-        Posts::find($id)->delete();
+        Kumbara::find($id)->delete();
 
         return redirect()->route('kumbara.index')
             ->with('success', 'Posts deleted successfully');
@@ -255,7 +257,7 @@ class KumbaraAdminController extends AdminController
         $out = Datatables::of($values);
         $out->rawColumns(['id', 'action']);
         $out->addColumn('action', function ($row) {
-            $output = '<a href="' . url(config('laraadmin.adminRoute') . 'admin/posts/' . $row->kumbara_id . '/edit') . '" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+            $output = '<a href="' . url(config('laraadmin.adminRoute') . 'admin/kumbara/' . $row->kumbara_id . '/edit') . '" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Düzenle</a>';
             $output .= Form::open(['route' => [config('laraadmin.adminRoute') . 'kumbara.destroy', $row->kumbara_id], 'method' => 'delete', 'style' => 'display:inline']);
             $output .= ' <button class="btn btn-danger btn-xs" type="submit"><i class="fa fa-times"></i></button>';
             $output .= Form::close();

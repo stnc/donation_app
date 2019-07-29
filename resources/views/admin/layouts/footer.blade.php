@@ -16,8 +16,8 @@
             <a class="nav-link" href="#">Blog</a>
         </li>
     </ul>
-    <span class="copyright ml-auto my-auto mr-2">Copyright © 2018
-              <a href="https://designrevision.com" rel="nofollow">DesignRevision</a>
+    <span class="copyright ml-auto my-auto mr-2">Copyright © 2019
+              <a href="https://designrevision.com" rel="nofollow">Evfa Otomasyon sistemi</a>
             </span>
 </footer>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
