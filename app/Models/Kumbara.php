@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Kumbara extends Model
 {
 
-  protected $fillable =['id', 'ad_soyad', 'telefon', 'city_id', 'town_id', 'referans','miktar','meslek','email','aciklama','add_user_id'];
+  protected $fillable =['id', 'rehber_id',  'city_id', 'town_id', 'referans','miktar','meslek','email','aciklama','add_user_id'];
   protected $table ='kumbara';
     // public function tags()
     // {

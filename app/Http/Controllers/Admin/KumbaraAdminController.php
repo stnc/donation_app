@@ -2,22 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-
-
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use App\Models\Kumbara;
 use App\Models\Rehber;
-use Illuminate\Support\Facades\Storage;
+use Collective\Html\FormFacade as Form;
 use Datatables;
 use DB;
-use Collective\Html\FormFacade as Form;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 class KumbaraAdminController extends AdminController
 {
 
-   
-    public $listing_cols = ['id', 'ad_soyad', 'telefon', 'il_id', 'ilce_id', 'referans','miktar','meslek','email','aciklama'];
+    public $listing_cols = ['id', 'rehber_id', 'il_id', 'ilce_id', 'referans', 'miktar', 'meslek', 'email', 'aciklama'];
 
     /**
      * Create a new controller instance.
@@ -39,7 +36,6 @@ class KumbaraAdminController extends AdminController
         return view('admin.kumbara.index');
     }
 
-
     /**
      * Show the form for creating a new resource.
      *
@@ -51,12 +47,10 @@ class KumbaraAdminController extends AdminController
 
         $citys = \App\Models\City::all();
         $townList = \App\Models\Town::all();
-
-
-        return view('admin.kumbara.create', compact('citys','townList'));
+        $rehbers = \App\Models\Rehber::all();
+        return view('admin.kumbara.create', compact('citys', 'townList','rehbers'));
 
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -70,15 +64,14 @@ class KumbaraAdminController extends AdminController
 
 
         $this->validate($request, [
-            'ad_soyad' => 'required',
-            'telefon' => 'required',
-
+            'rehber_id' => 'required',
+            'town_id' => 'required',
+            'city_id' => 'required',
         ]);
 
         $kumbara_data = [
-            'ad_soyad' => $request->ad_soyad,
-            'telefon' => $request->telefon,
-            'referans' => $request->referans,
+
+            'rehber_id' => $request->rehber_id,
             'miktar' => $request->miktar,
             'meslek' => $request->meslek,
             'email' => $request->email,
@@ -88,26 +81,12 @@ class KumbaraAdminController extends AdminController
             'add_user_id' => Auth('admin')->user()->id,
         ];
 
-        $kukmbara=Kumbara::create($kumbara_data);
-
-
-
-        $rehber_data = [
-            'ad_soyad' => $request->ad_soyad,
-            'telefon' => $request->telefon,
-            'add_user_id' => Auth('admin')->user()->id,
-            'add_method' => 1,
-            'relation_id' => $kukmbara->id,
-        ];
-
-        Rehber::create($rehber_data);
- 
+        $kukmbara = Kumbara::create($kumbara_data);
 
         return redirect()->route('kumbara.index')
             ->with('success', 'Kumbara kayıt  işlemi başarı ile yapıldı ');
 
     }
-
 
     /**
      * Display the specified resource.
@@ -117,7 +96,6 @@ class KumbaraAdminController extends AdminController
      */
 
     public function show($id, Request $request)
-
     {
 
         $posts = Posts::find($id);
@@ -125,9 +103,7 @@ class KumbaraAdminController extends AdminController
         $comments = ($posts->comments()->get());
         return view('admin.kumbara.show', compact('posts', 'tags', "comments"));
 
-
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -137,27 +113,17 @@ class KumbaraAdminController extends AdminController
      */
 
     public function edit($id)
-
     {
-        $posts = Kumbara::where('id', '=', $id)->first();
-    
+        $kumbara = Kumbara::where('id', '=', $id)->first();
 
         $citys = \App\Models\City::all();
-    
-         $townList = \App\Models\Town::where('CityID', '=',  $posts->city_id)->get();
 
-        return view('admin.kumbara.edit', compact('citys','townList','posts'));
+        $rehbers = \App\Models\Rehber::all();
 
+        $townList = \App\Models\Town::where('CityID', '=', $kumbara->city_id)->get();
 
-    }
+        return view('admin.kumbara.edit', compact('citys', 'townList', 'kumbara','rehbers'));
 
-    //ajax method
-    public function getStateList(Request $request)
-    {
-        $states = DB::table("town")
-        ->where("CityID",$request->city_id)
-        ->pluck("TownName","TownID");
-        return response()->json($states);
     }
 
     /**
@@ -170,47 +136,27 @@ class KumbaraAdminController extends AdminController
      */
 
     public function update(Request $request, $id)
-
     {
 
+        $this->validate($request, [
+            'rehber_id' => 'required',
+            'town_id' => 'required',
+            'city_id' => 'required',
+        ]);
 
-
-
-$this->validate($request, [
-    'ad_soyad' => 'required',
-    'telefon' => 'required',
-
-]);
-
-$kumbara_data = [
-    'ad_soyad' => $request->ad_soyad,
-    'telefon' => $request->telefon,
-    'referans' => $request->referans,
-    'miktar' => $request->miktar,
-    'meslek' => $request->meslek,
-    'email' => $request->email,
-    'aciklama' => $request->aciklama,
-    'town_id' => $request->town_id,
-    'city_id' => $request->city_id,
-    'add_user_id' => Auth('admin')->user()->id,
-];
-$kukmbara = Kumbara::find($id);
-$kukmbara->update($kumbara_data);
-
-
-
-$rehber_data = [
-    'ad_soyad' => $request->ad_soyad,
-    'telefon' => $request->telefon,
-    'add_user_id' => Auth('admin')->user()->id,
-    'add_method' => 1,
-    'relation_id' => $kukmbara->id,
-];
-
-
-$Rehber = Rehber::where('relation_id', '=',  $kukmbara->id);
-$Rehber->update($rehber_data);
-
+        $kumbara_data = [
+            'rehber_id' => $request->rehber_id,
+            'referans' => $request->referans,
+            'miktar' => $request->miktar,
+            'meslek' => $request->meslek,
+            'email' => $request->email,
+            'aciklama' => $request->aciklama,
+            'town_id' => $request->town_id,
+            'city_id' => $request->city_id,
+            'add_user_id' => Auth('admin')->user()->id,
+        ];
+        $kukmbara = Kumbara::find($id);
+        $kukmbara->update($kumbara_data);
 
 
 
@@ -218,7 +164,6 @@ $Rehber->update($rehber_data);
             ->with('success', 'Posts updated successfully');
 
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -228,7 +173,6 @@ $Rehber->update($rehber_data);
      */
 
     public function destroy($id)
-
     {
 
         Kumbara::find($id)->delete();
@@ -237,7 +181,6 @@ $Rehber->update($rehber_data);
             ->with('success', 'Posts deleted successfully');
 
     }
-
 
     /**
      * Datatable Ajax fetch
@@ -248,10 +191,11 @@ $Rehber->update($rehber_data);
     {
 
         $values = DB::table('kumbara')->
-        select( 'kumbara.id as kumbara_id','city.CityName as ilAdi', 
-        'town.TownName as ilceAdi', 'ad_soyad', 'telefon', 'miktar')
-        ->join('city', 'city.CityID', '=', 'kumbara.city_id')
-        ->join('town', 'town.TownID', '=', 'kumbara.town_id');
+            select('kumbara.id as kumbara_id', 'city.CityName as ilAdi',
+            'town.TownName as ilceAdi', 'rehber.ad_soyad', 'rehber.telefon', 'miktar')
+            ->join('city', 'city.CityID', '=', 'kumbara.city_id')
+            ->join('rehber', 'rehber.id', '=', 'kumbara.rehber_id')
+            ->join('town', 'town.TownID', '=', 'kumbara.town_id');
         // ->toSql();
         // dd($values );
         $out = Datatables::of($values);
@@ -266,6 +210,16 @@ $Rehber->update($rehber_data);
         });
         return $out->make(true);
     }
+
+    //ajax method
+    public function getStateList(Request $request)
+    {
+        $states = DB::table("town")
+            ->where("CityID", $request->city_id)
+            ->pluck("TownName", "TownID");
+        return response()->json($states);
+    }
+
 
 
 }

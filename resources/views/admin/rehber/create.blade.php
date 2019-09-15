@@ -39,6 +39,11 @@
                     <label>Telefon:</label>
                     {!! Form::text('telefon', null, array('placeholder' => 'Telefon','class' => 'form-control form-control-lg mb-3')) !!}
                 </div>
+       
+                <div class="form-row mx-4">
+                    <label>Adres:</label>
+                    {!! Form::textarea('adres', null, array('placeholder' => 'Adres','class' => 'form-control form-control-lg mb-3')) !!}
+             </div>
 
       
                 <p>
@@ -57,17 +62,11 @@
 
             <div class="card-body p-0">
 
-                <hr>
 
-       
-
-                <!-- <div class="form-row mx-4">
-                    <label>Açıklama:</label>
-
-                    {!! Form::textarea('aciklama', null, array('placeholder' => 'Açıklama','class' => 'form-control','style'=>'height:100px')) !!}
-                </div>
-
-            -->
+            <div class="form-row mx-4">
+                    <label>Referans:</label>
+                    {!! Form::textarea('referans', null, array('placeholder' => 'referans','class' => 'form-control form-control-lg mb-3')) !!}
+             </div>
 
             </div>
             <div class="card-footer border-top">

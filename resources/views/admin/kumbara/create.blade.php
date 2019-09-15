@@ -30,15 +30,17 @@
             <div class="card-body p-0">
 
                 <hr>
-
-                <div class="form-row mx-4">
-                    <label>Adı Soyadı:</label>
-                    {!! Form::text('ad_soyad', null, array('placeholder' => 'Adı Soyadı','class' => 'form-control form-control-lg mb-3')) !!}
-                </div>
-                <div class="form-row mx-4">
-                    <label>Telefon:</label>
-                    {!! Form::text('telefon', null, array('placeholder' => 'Telefon','class' => 'form-control form-control-lg mb-3')) !!}
-                </div>
+                        <div class="form-row mx-4">
+                            <div class="form-group">
+                                <label for="title">Ad Soyad</label>
+                                <input type="hidden" name="rehber_id" id="rehber_id">
+                                <select id="rehber" name="rehber" class="form-control" onchange="changeSelect(event)" style="width:650px">
+                                    @foreach($rehbers as $key => $rehber)
+                                    <option value="{{ $rehber->rehber_id }}">{{ $rehber->ad_soyad }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                         </div>
 
                 <div class="form-row mx-4">
                     <label>Referans:</label>
@@ -49,13 +51,9 @@
                     <label>Miktar:</label>
                     <div class="input-group mb-3">
 
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">TL</span>
-                        </div>
+
                         {!! Form::text('miktar', null, array('placeholder' => 'miktar','class' => 'form-control')) !!}
-                        <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
-                        </div>
+
                     </div>
                 </div>
                 <p>
@@ -108,7 +106,7 @@
                                 <select id="city" name="city_id" class="form-control" style="width:350px">
                                     <option value="" selected disabled>Şehir</option>
                                     @foreach($citys as $key => $city)
-                                    <option value="{{ $city->CityID }}">{{ $city->CityName }}</option>
+                                    <option  data_id="{{ $city->CityID }}" value="{{ $city->CityID }}">{{ $city->CityName }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -142,34 +140,49 @@
 </div>
 {!! Form::close() !!} @stop @section('scripts')
 <script language="javascript" type="text/javascript">
-    $("#saveBtn").click(function() {
-        $("#formId").submit();
-    });
 
-    $('#city').change(function() {
-        var cityID = $(this).val();
-        if (cityID) {
-            $.ajax({
-                type: "GET",
-                url: "{{url('admin/get-state-list')}}?city_id=" + cityID,
-                success: function(res) {
-                    if (res) {
-                        $("#town_id").empty();
-                        $("#town_id").append('<option>Select</option>');
-                        $.each(res, function(key, value) {
-                            $("#town_id").append('<option value="' + key + '">' + value + '</option>');
-                        });
+function changeSelect(event){
+    $('#rehber_id').val($("#rehber option:selected").attr('data-select2-id'));
+}
 
-                    } else {
-                        $("#town_id").empty();
-                    }
+
+$(function(){
+
+$('#rehber').select2();
+
+$("#saveBtn").click(function() {
+    $("#formId").submit();
+});
+
+$('#city').change(function() {
+    var cityID = $(this).val();
+    if (cityID) {
+        $.ajax({
+            type: "GET",
+            url: "{{url('admin/get-state-list')}}?city_id=" + cityID,
+            success: function(res) {
+                if (res) {
+                    $("#town_id").empty();
+                    $("#town_id").append('<option>Select</option>');
+                    $.each(res, function(key, value) {
+                        $("#town_id").append('<option value="' + key + '">' + value + '</option>');
+                    });
+
+                } else {
+                    $("#town_id").empty();
                 }
-            });
-        } else {
-            $("#town_id").empty();
-            $("#city").empty();
-        }
-    });
+            }
+        });
+    } else {
+        $("#town_id").empty();
+        $("#city").empty();
+    }
+});
+
+
+});
+
+
 </script>
 
 @endsection

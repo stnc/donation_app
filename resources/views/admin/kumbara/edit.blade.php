@@ -19,7 +19,7 @@
     </div>
 </div>
 <!-- End Page Header -->
-{!! Form::model($posts, ['method' => 'PATCH','files'=>'true', 'class' => ' add-new-post', "id"=>"formId", 'route' => ['kumbara.update', $posts->id]]) !!}
+{!! Form::model($kumbara, ['method' => 'PATCH','files'=>'true', 'class' => ' add-new-post', "id"=>"formId", 'route' => ['kumbara.update', $kumbara->id]]) !!}
 
 <div class="row">
 
@@ -28,18 +28,26 @@
         <div class="card card-small edit-user-details mb-4">
 
             <div class="card-body p-0">
-
                 <hr>
 
                 <div class="form-row mx-4">
-                    <label>Adı Soyadı:</label>
-                    {!! Form::text('ad_soyad', null, array('placeholder' => 'Adı Soyadı','class' => 'form-control form-control-lg mb-3')) !!}
-                </div>
+                            <div class="form-group">
+                                <label for="title">Ad Soyad</label>
+                                <input type="hidden" name="rehber_id" id="rehber_id">
+                                <select id="rehber" name="rehber" class="form-control" onchange="changeSelect(event)" style="width:650px">
+                                    @foreach($rehbers as $key => $rehber)
+                                        @if ($rehber->id == $kumbara->rehber_id )
+                                       
+                                        <option selected="selected" value="{{ $rehber->rehber_id }}">{{ $rehber->ad_soyad }}</option>
+                                        @else
+                                        <option value="{{ $rehber->rehber_id }}">{{ $rehber->ad_soyad }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                         </div>
 
-                <div class="form-row mx-4">
-                    <label>Telefon:</label>
-                    {!! Form::text('telefon', null, array('placeholder' => 'Telefon','class' => 'form-control form-control-lg mb-3')) !!}
-                </div>
+       
 
                 <div class="form-row mx-4">
                     <label>Referans:</label>
@@ -50,13 +58,8 @@
                     <label>Miktar:</label>
                     <div class="input-group mb-3">
 
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">TL</span>
-                        </div>
                         {!! Form::text('miktar', null, array('placeholder' => 'miktar','class' => 'form-control')) !!}
-                        <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
-                        </div>
+                 
                     </div>
                 </div>
                 <p>
@@ -109,7 +112,7 @@
                                 <select id="city" name="city_id" class="form-control" style="width:350px">
                                     <option value="" selected disabled>Şehir</option>
                                     @foreach($citys as $key => $city)
-                                         @if ($posts->city_id == $city->CityID )
+                                         @if ($kumbara->city_id == $city->CityID )
                                          <option selected value="{{ $city->CityID }}">{{ $city->CityName }}</option>
                                         @else
                                         <<option value="{{ $city->CityID }}">{{ $city->CityName }}</option>
@@ -129,7 +132,7 @@
                                 <select name="town_id" id="town_id" class="form-control" style="width:350px">
                                      @foreach($townList as $key => $town)
 
-                                        @if ($posts->town_id == $town->TownID )
+                                        @if ($kumbara->town_id == $town->TownID )
                                           <option selected value="{{ $town->TownID }}">{{ $town->TownName }}</option>
                                         @else
                                         <option value="{{ $town->TownID }}">{{ $town->TownName }}</option>
@@ -157,8 +160,23 @@
 </div>
 
 </div>
-{!! Form::close() !!} @stop @section('scripts')
+{!! Form::close() !!} 
+
+@stop @section('scripts')
+
 <script language="javascript" type="text/javascript">
+
+
+function changeSelect(event){
+    $('#rehber_id').val($("#rehber option:selected").attr('data-select2-id'));
+}
+
+$(function(){
+
+
+    // $('#rehber').select2().select2('val',{{ $kumbara->rehber_id }})
+    $('#rehber').select2();
+
     $("#saveBtn").click(function() {
         $("#formId").submit();
     });
@@ -187,6 +205,7 @@
             $("#city").empty();
         }
     });
+});
 </script>
 
 @endsection

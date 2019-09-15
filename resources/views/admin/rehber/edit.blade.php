@@ -19,7 +19,7 @@
 <div class="page-header row no-gutters py-4">
     <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
         <span class="text-uppercase page-subtitle">Rehber</span>
-        <h3 class="page-title">Rehbere Düzenle</h3>
+        <h3 class="page-title">Kişi Düzenle</h3>
     </div>
 </div>
 <!-- End Page Header -->
@@ -44,6 +44,7 @@
                     <label>Telefon:</label>
                     {!! Form::text('telefon', null, array('placeholder' => 'Telefon','class' => 'form-control form-control-lg mb-3')) !!}
                 </div>
+          
 
                 <div class="form-row mx-4">
                     @if ($posts->add_method == 1 )
@@ -54,6 +55,18 @@
                 </div>
 
                 <div class="card-footer border-top">
+
+                <div class="form-row mx-4">
+                    <label>Adres:</label>
+                    {!! Form::textarea('adres', null, array('placeholder' => 'Adres','class' => 'form-control form-control-lg mb-3')) !!}
+                </div>
+
+                <div class="form-row mx-4">
+                    <label>Referans:</label>
+                    {!! Form::textarea('referans', null, array('placeholder' => 'Referans','class' => 'form-control form-control-lg mb-3')) !!}
+                </div>
+
+
                     <a href="#" id="saveBtn" class="btn btn-sm btn-accent ml-auto d-table mr-3">Kaydet</a>
                 </div>
 
@@ -86,6 +99,7 @@
                 <div class="form-row mx-4">
                     {!! Form::hidden('telefon',  $posts->telefon, array('class' => 'form-control form-control-lg mb-3')) !!}
                 </div>
+
 
                 <div class="form-row mx-4">
                             <div class="form-group">

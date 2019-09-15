@@ -17,7 +17,7 @@ use Collective\Html\FormFacade as Form;
 class RehberAdminController extends AdminController
 {
 
-    public $listing_cols = ['id', 'ad_soyad', 'telefon', 'ad', 'soyad', 'relation_id'];
+    public $listing_cols = ['id', 'ad_soyad', 'telefon','referans', 'ad', 'soyad', 'relation_id'];
 
     /**
      * Create a new controller instance.
@@ -67,6 +67,7 @@ class RehberAdminController extends AdminController
         $this->validate($request, [
             'ad_soyad' => 'required',
             'telefon' => 'required',
+ 
 
         ]);
 
@@ -74,6 +75,8 @@ class RehberAdminController extends AdminController
         $rehber_data = [
             'ad_soyad' => $request->ad_soyad,
             'telefon' => $request->telefon,
+            'referans' => $request->referans,
+            'adres' => $request->adres,
             'add_user_id' => Auth('admin')->user()->id,
             'add_method' => 1,
             'relation_id' => 0,
@@ -135,6 +138,8 @@ class RehberAdminController extends AdminController
             $rehber_data = [
                 'ad_soyad' => $request->ad_soyad,
                 'telefon' => $request->telefon,
+                'referans' => $request->referans,
+                'adres' => $request->adres,
                 'add_user_id' => Auth('admin')->user()->id,
                 'add_method' => 1,
                 // 'relation_id' => $id,
