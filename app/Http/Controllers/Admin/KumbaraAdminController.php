@@ -73,6 +73,7 @@ class KumbaraAdminController extends AdminController
 
             'rehber_id' => $request->rehber_id,
             'miktar' => $request->miktar,
+            'referans' => $request->referans,
             'meslek' => $request->meslek,
             'email' => $request->email,
             'aciklama' => $request->aciklama,

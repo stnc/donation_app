@@ -33,7 +33,7 @@
                 <div class="form-row mx-4">
                             <div class="form-group">
                                 <label for="title">Ad Soyad</label>
-                                <input type="hidden" name="rehber_id" id="rehber_id">
+                                <input type="hidden" name="rehber_id" value="{{ $kumbara->rehber_id }}" id="rehber_id">
                                 <select id="rehber" name="rehber" class="form-control" onchange="changeSelect(event)" style="width:650px">
                                     @foreach($rehbers as $key => $rehber)
                                         @if ($rehber->id == $kumbara->rehber_id )

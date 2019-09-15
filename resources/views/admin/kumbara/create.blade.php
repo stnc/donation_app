@@ -52,7 +52,7 @@
                     <div class="input-group mb-3">
 
 
-                        {!! Form::text('miktar', null, array('placeholder' => 'miktar','class' => 'form-control')) !!}
+                        {!! Form::text('miktar', null, array('placeholder' => 'Miktar','class' => 'form-control')) !!}
 
                     </div>
                 </div>
